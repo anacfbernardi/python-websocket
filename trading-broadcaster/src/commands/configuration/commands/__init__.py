@@ -1,0 +1,5 @@
+from src.commands.configuration.commands.add_provider import AddProvider
+from src.commands.configuration.commands.add_trading_aggregator import AddTradingAggregator
+from src.commands.configuration.commands.clear_prices import ClearPrices
+from src.commands.configuration.commands.clear_providers import ClearProviders
+from src.commands.configuration.commands.clear_trading_aggregators import ClearTradingAggregators

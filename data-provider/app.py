@@ -22,7 +22,7 @@ data_provider_server = None
 
 messagesConfig = {
   'timeToWaitBeforeSendingFirstMessage': 1000,
-  'timeToWaitBeforeSendingNewMessage': 500,
+  'timeToWaitBeforeSendingNewMessage': 60,
   'numberOfIterations': 1,
   'messages': [
       {
@@ -106,10 +106,12 @@ async def handler(ws, path):
         CONNECTIONS.add(ws)
 
         if messagesConfig:
-            await asyncio.sleep((messagesConfig["timeToWaitBeforeSendingFirstMessage"] or 5000) / 1000)
-            await send_data()
-            print('finished sending data')
-
+            while True:
+                await asyncio.sleep((messagesConfig["timeToWaitBeforeSendingFirstMessage"] or 5000) / 1000)
+                await send_data()
+                print('finished sending data')
+                print(f'will send again in {messagesConfig["timeToWaitBeforeSendingNewMessage"] or 5000} seconds')
+                await asyncio.sleep(messagesConfig["timeToWaitBeforeSendingNewMessage"] or 5000)
         async for message in ws:
             try:
                 data = json.loads(message)

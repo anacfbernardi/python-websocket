@@ -3,3 +3,7 @@
 
 # SonarQube
 .scannerwork/
+
+
+__pycache__/*
+*.py[cod]

@@ -1,10 +1,11 @@
 import asyncio
 import json
 import os
-import requests
 
 import websockets
 from dotenv import load_dotenv
+
+from src.process_message import process_message_data
 
 load_dotenv()
 
@@ -20,7 +21,7 @@ async def main():
 
 
 async def create_trading_broadcaster_server():
-    port = int(os.getenv('WS_CONSUMER_PORT', 9000))
+    port = int(os.getenv("WS_CONSUMER_PORT", 9000))
     trading_broadcaster_server = await websockets.serve(handler, "127.0.0.1", port)
     print(f"server listening on port {port}")
     return trading_broadcaster_server
@@ -32,10 +33,12 @@ async def handler(ws, path):
 
         async for message in ws:
             try:
-                data = json.loads(message)
+                data = await process_message_data(message)
                 print("message received: ", data)
+                await ws.send(json.dumps(data))
             except Exception as e:
                 print(e)
+                await ws.send(json.dumps(e))
 
     except Exception as e:
         print(e)

@@ -1,10 +1,12 @@
 import asyncio
 import json
 import os
-import requests
 
 import websockets
 from dotenv import load_dotenv
+
+from src.process_message import process_message_data
+from src.services.connections_manager import connections
 
 load_dotenv()
 
@@ -20,7 +22,7 @@ async def main():
 
 
 async def create_trading_aggregator_server():
-    port = int(os.getenv('WS_CONSUMER_PORT', 9100))
+    port = int(os.getenv("WS_CONSUMER_PORT", 9100))
     trading_aggregator_server = await websockets.serve(handler, "127.0.0.1", port)
     print(f"server listening on port {port}")
     return trading_aggregator_server
@@ -28,12 +30,13 @@ async def create_trading_aggregator_server():
 
 async def handler(ws, path):
     try:
+        await connections.add_connection(ws)
         print("client connected")
 
         async for message in ws:
             try:
-                data = json.loads(message)
-                print("message received: ", data)
+                data = await process_message_data(message)
+                await ws.send(json.dumps(data))
             except Exception as e:
                 print(e)
 
