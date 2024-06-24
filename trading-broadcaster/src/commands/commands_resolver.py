@@ -30,6 +30,6 @@ class ResolveCommands:
         try:
             resolve = ResolveCommands()
             command = resolve.__get_command(data_received["action"])
-            return await command(data_received).process_data_received()
+            return await command(data_received, path, ws).process_data_received()
         except Exception as e:
             return return_default_error()

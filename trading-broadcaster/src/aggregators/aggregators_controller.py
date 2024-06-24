@@ -20,7 +20,7 @@ class AggregatorsController:
             await aggregator.start_listening_aggregator()
 
     async def remove_aggregator(self, url):
-        aggregator = any(a.url == url for a in self._aggregators)
+        aggregator = next((p for p in self._aggregators if p.url == url), None)
         if aggregator is not None:
             await aggregator.stop_listening_aggregator()
         self._aggregators = [a for a in self._aggregators if a.url != url]

@@ -1,8 +1,5 @@
 import json
-import asyncio
 from typing import Dict
-
-from websockets.sync.client import connect
 
 from src.aggregators.aggregators_controller import aggregators
 from src.commands.base_command import BaseCommand
@@ -29,7 +26,7 @@ class AddProvider(BaseCommand):
         try:
             message = await aggregator.send_message_to_aggregator(json.dumps(self._data_received))
             aggregator.inc_providers_count()
-            print(f"Received: {message}")                
+            print(f"Received: {message}")
             return json.loads(message)
         except Exception as e:
             print(e)
