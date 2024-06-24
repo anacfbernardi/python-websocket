@@ -1,6 +1,6 @@
 from src.commands.base_command import BaseCommand
 from src.commons.default_error_message import return_default_error
-from src.providers.providers_list import providers
+from src.providers.providers_controller import providers
 
 
 class ClearProviders(BaseCommand):

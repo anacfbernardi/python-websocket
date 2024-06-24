@@ -3,7 +3,7 @@ from typing import Dict
 
 from websockets.sync.client import connect
 
-from src.aggregators.aggregators_list import aggregators
+from src.aggregators.aggregators_controller import aggregators
 from src.commands.base_command import BaseCommand
 from src.commons.default_error_message import return_default_error
 
@@ -24,8 +24,7 @@ class ClearPrices(BaseCommand):
 
         for aggregator in aggregators_list:                
             try:
-                await aggregator.sender.send(json.dumps(self._data_received))
-                message = await aggregator.sender.recv()
+                message = await aggregator.send_message_to_aggregator(json.dumps(self._data_received))
                 print(f"Received: {message}")
             except Exception as e:
                 print(e)

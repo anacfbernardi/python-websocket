@@ -3,13 +3,13 @@ from typing import List
 from src.aggregators.aggregator import Aggregator
 
 
-class AggregatorsList:
+class AggregatorsController:
     _instance = None
     _aggregators = List[Aggregator]
 
     def __new__(cls):
         if cls._instance is None:
-            cls._instance = super(AggregatorsList, cls).__new__(cls)
+            cls._instance = super(AggregatorsController, cls).__new__(cls)
             cls._instance._aggregators = []
         return cls._instance
 
@@ -32,4 +32,4 @@ class AggregatorsList:
         return min(self._aggregators, key=lambda a: a.providers_count) if len(self._aggregators) else None
 
 
-aggregators = AggregatorsList()
+aggregators = AggregatorsController()

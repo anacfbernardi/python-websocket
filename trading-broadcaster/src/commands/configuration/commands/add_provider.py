@@ -4,7 +4,7 @@ from typing import Dict
 
 from websockets.sync.client import connect
 
-from src.aggregators.aggregators_list import aggregators
+from src.aggregators.aggregators_controller import aggregators
 from src.commands.base_command import BaseCommand
 from src.commons.default_error_message import return_default_error
 
@@ -27,12 +27,10 @@ class AddProvider(BaseCommand):
             return return_default_error()
 
         try:
-            if aggregator.sender.open:
-                await aggregator.sender.send(json.dumps(self._data_received))
-                message = await aggregator.sender.recv()
-                aggregator.inc_providers_count()
-                print(f"Received: {message}")                
-                return json.loads(message)
+            message = await aggregator.send_message_to_aggregator(json.dumps(self._data_received))
+            aggregator.inc_providers_count()
+            print(f"Received: {message}")                
+            return json.loads(message)
         except Exception as e:
             print(e)
             return return_default_error()

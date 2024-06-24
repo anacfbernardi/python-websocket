@@ -41,4 +41,12 @@ class Aggregator:
         except ConnectionClosed:
             await self.stop_listening_aggregator()
             
+            
+    async def send_message_to_aggregator(self, message: str) -> str:
+        if self.sender.open:
+            await self.sender.send(message)
+            message = await self.sender.recv()
+            self.sender.messages.clear()
+            return message
+            
 

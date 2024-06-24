@@ -3,13 +3,13 @@ from typing import List
 from src.providers.provider import Provider
 
 
-class ProvidersList:
+class ProvidersController:
     _instance = None
     _providers = List[Provider]
 
     def __new__(cls):
         if cls._instance is None:
-            cls._instance = super(ProvidersList, cls).__new__(cls)
+            cls._instance = super(ProvidersController, cls).__new__(cls)
             cls._instance._providers = []
         return cls._instance
 
@@ -26,4 +26,4 @@ class ProvidersList:
         return self._providers
 
 
-providers = ProvidersList()
+providers = ProvidersController()
