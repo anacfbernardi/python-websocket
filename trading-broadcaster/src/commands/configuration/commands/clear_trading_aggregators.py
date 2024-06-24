@@ -29,15 +29,13 @@ class ClearTradingAggregators(BaseCommand):
 
         try:
             for aggregator in aggregators_list:
-                with connect(aggregator.url) as websocket:
-                    data_string = json.dumps({"action": "clear-providers"})
-                    try:
-                        websocket.send(data_string)
-                        message = await websocket.recv()
-                        print(f"Received: {message}")
-                        await aggregators.remove_aggregator(aggregator.url)
-                    except Exception as e:
-                        print(e)
+                try: 
+                    await aggregator.sender.send(json.dumps({"action": "clear-providers"}))
+                    message = await aggregator.sender.recv()
+                    await aggregators.remove_aggregator(aggregator.url)
+                    print(f"Received: {message}")
+                except Exception as e:
+                    print(e)
         except Exception as e:
             print(e)
             return return_default_error()

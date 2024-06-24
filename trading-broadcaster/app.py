@@ -33,7 +33,7 @@ async def handler(ws, path):
 
         async for message in ws:
             try:
-                data = await process_message_data(message)
+                data = await process_message_data(message, path, ws)
                 print("message received: ", data)
                 await ws.send(json.dumps(data))
             except Exception as e:

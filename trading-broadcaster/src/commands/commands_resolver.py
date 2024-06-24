@@ -16,7 +16,7 @@ class ResolveCommands:
         ConfigurationCommandsType.ADD_TRADING_AGGREGATOR.value: AddTradingAggregator,
         ConfigurationCommandsType.CLEAR_TRADING_AGGREGATORS.value: ClearTradingAggregators,
         ConfigurationCommandsType.ADD_PROVIDER.value: AddProvider,
-        ConfigurationCommandsType.CLEAR_PROVIDER.value: ClearProviders,
+        ConfigurationCommandsType.CLEAR_PROVIDERS.value: ClearProviders,
         ConfigurationCommandsType.CLEAR_PRICES.value: ClearPrices,
         DataCommandsType.SUBSCRIBE.value: Subscribe,
         DataCommandsType.UNSUBSCRIBE.value: Unsubscribe,
@@ -26,7 +26,7 @@ class ResolveCommands:
         return self.__ACTION_MAP[action]
 
     @staticmethod
-    async def resolve_commands(data_received: dict):
+    async def resolve_commands(data_received: dict, path: str, ws: any):
         try:
             resolve = ResolveCommands()
             command = resolve.__get_command(data_received["action"])

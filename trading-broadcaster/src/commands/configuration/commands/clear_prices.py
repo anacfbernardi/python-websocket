@@ -22,14 +22,12 @@ class ClearPrices(BaseCommand):
         if not len(aggregators_list):
             return return_default_error()
 
-        for aggregator in aggregators_list:
-            with connect(aggregator.url) as websocket:
-                data_string = json.dumps(self._data_received)
-                try:
-                    websocket.send(data_string)
-                    message = await websocket.recv()
-                    print(f"Received: {message}")
-                except Exception as e:
-                    print(e)
+        for aggregator in aggregators_list:                
+            try:
+                await aggregator.sender.send(json.dumps(self._data_received))
+                message = await aggregator.sender.recv()
+                print(f"Received: {message}")
+            except Exception as e:
+                print(e)
 
         return {"status": "Processed"}

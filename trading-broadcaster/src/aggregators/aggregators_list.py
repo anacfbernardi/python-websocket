@@ -28,7 +28,7 @@ class AggregatorsList:
     def get_aggregators(self) -> List[Aggregator]:
         return self._aggregators
 
-    def get_aggregator_with_min_providers_count(self):
+    def get_aggregator_with_min_providers_count(self) -> Aggregator:
         return min(self._aggregators, key=lambda a: a.providers_count) if len(self._aggregators) else None
 
 

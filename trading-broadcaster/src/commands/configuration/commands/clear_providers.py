@@ -21,15 +21,15 @@ class ClearProviders(BaseCommand):
         if len(aggregators_list) == 0:
             return return_default_error()
 
-        for aggregator in aggregators_list:
-            with connect(aggregator.url) as websocket:
-                data_string = json.dumps(self._data_received)
-                try:
-                    websocket.send(data_string)
-                    message = await websocket.recv()
+        for aggregator in aggregators_list:     
+            try:
+                if aggregator.sender.open:
+                    await aggregator.sender.send(json.dumps(self._data_received))
+                    message = await aggregator.sender.recv()
                     aggregator.clear_providers_count()
                     print(f"Received: {message}")
-                except Exception as e:
-                    print(e)
-
+            except Exception as e:
+                print(e)
+                return return_default_error()
+            
         return {"status": "Processed"}

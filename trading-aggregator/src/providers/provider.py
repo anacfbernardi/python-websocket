@@ -20,7 +20,7 @@ class Provider:
     async def start_listening_provider(self):
         self.connection = await connect(self.url)
         print(f"Listening to Provider {self.url}")
-        asyncio.get_event_loop().create_task(self.__listen_to_provider())
+        asyncio.get_event_loop().create_task(self.__listen_to_provider(), name=self.url)
 
     async def stop_listening_provider(self):
         await self.connection.close()

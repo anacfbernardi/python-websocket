@@ -1,4 +1,5 @@
 import json
+import asyncio
 from typing import Dict
 
 from websockets.sync.client import connect
@@ -25,13 +26,13 @@ class AddProvider(BaseCommand):
         if aggregator is None:
             return return_default_error()
 
-        with connect(aggregator.url) as websocket:
-            data_string = json.dumps(self._data_received)
-            try:
-                websocket.send(data_string)
-                message = websocket.recv()
-                print(f"Received: {message}")
-                return message
-            except Exception as e:
-                print(e)
-                return return_default_error()
+        try:
+            if aggregator.sender.open:
+                await aggregator.sender.send(json.dumps(self._data_received))
+                message = await aggregator.sender.recv()
+                aggregator.inc_providers_count()
+                print(f"Received: {message}")                
+                return json.loads(message)
+        except Exception as e:
+            print(e)
+            return return_default_error()
